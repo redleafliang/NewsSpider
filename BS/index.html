@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+    <meta name="viewport" content="width=device-width, initial-scale=0.3, minimum-scale=0.1, maximum-scale=2.0, user-scalable=yes" />
+    <title>主页面</title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/mymain2.css">
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        body { background-color: #d2b48c; }
+    </style>
+
+</head>
+
+
+<body onload="showNews()">
+
+
+
+
+
+
+<div class="jumbotron" style=" -moz-border-radius: 40px; -webkit-border-radius: 40px; border-radius: 40px; margin-top: 50px; margin-left: 20px; margin-right: 20px;width: auto; ">
+    <h1  style="margin-left: 80px;">澳门首家线上新闻网上线啦</h1>
+    <p style="margin-left: 100px;">变态绅士编辑在线指导,陪您嗨翻天,给你不一样的阅读体验</p>
+    <p><a class="btn btn-primary btn-lg" href="Login.html" role="button" style="margin-left: 100px;">注销账号</a></p>
+</div>
+
+
+
+<ul class="nav nav-pills nav-stacked" role="tablist">
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="PersonalInfo()"><a href="#" style=" width:250px; text-align: center; margin-top: 50px">个人中心</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showMyNews()"><a href="#" style=" width:250px ;text-align: center">定制新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showAINews()"><a href="#" style=" width:250px ;text-align: center">推荐新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;"    class="active"><a href="index.html" style=" width:250px ;text-align: center">所有新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(6)"><a href="#" style=" width:250px ;text-align: center">教育新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(7)"><a href="#" style=" width:250px ;text-align: center">汽车新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(8)"><a href="#" style=" width:250px ;text-align: center">手机新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(9)"><a href="#" style=" width:250px ;text-align: center">娱乐新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(10)"><a href="#" style=" width:250px ;text-align: center">旅游新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(5)"><a href="#" style=" width:250px ;text-align: center">科技新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(4)"><a href="#" style=" width:250px ;text-align: center">军事新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(3)"><a href="#" style=" width:250px ;text-align: center">游戏新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(2)"><a href="#" style=" width:250px ;text-align: center">经济新闻</a></li>
+<li role="presentation"  style=" width:150px; margin-left: 70px;" onclick="showOtherNews(1)"><a href="#" style=" width:250px ;text-align: center">体育新闻</a></li>
+</ul>
+
+
+
+<div id="board" style="width:1000px; margin-left:400px; margin-top:-600px;"></div>
+
+<div id="hobbit-door" class="entry">
+    <div></div>
+</div>
+
+
+    <script type="text/javascript">
+
+
+        function PersonalInfo() {
+            var user_name=window.location.href.split("=")[1];
+            var url = "PersonalInfo.html?index="+user_name;
+            window.location.href = url;
+        }
+
+
+
+        function read(id,index) {
+
+            var user_name=window.location.href.split("=")[1];
+            var url = "news.html?index="+id+"="+index+"="+user_name;
+            console.log(url)
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+                    var json = xmlhttp.responseText;
+                    var json = JSON.parse(json);
+                    console.log(json)
+                    if (json["code"] == 0) {
+                        window.location.href = url;
+                    }
+                    if (json["code"] == 1) {
+                        alert("出错");
+                    }
+
+                }
+            };
+//            xmlhttp.open("GET", "login/login.php", true);
+//            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//            xmlhttp.send("id=" + encodeURIComponent(str1) + "&password=" + encodeURIComponent(str2));
+
+            xmlhttp.open('GET', "AIlearn.php?index="+index+"&user_name="+user_name,true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send();
+
+
+
+
+
+
+        }
+
+
+
+        function findMySetting(user_name) {
+
+            var games=0,technology=0 , military=0  , economy =0 , sports=0 , entertainment =0, education=0, phone=0 , car=0, tour =0
+            var myNews=new Array(10);
+            var xmlhttp;
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var json = xmlhttp.responseText;
+                    var json = JSON.parse(json);
+                    if (json["code"] == 0) {
+                        myNews[2] =json["res"].games;
+                        myNews[4] = json["res"].technology;
+                        myNews[3] = json["res"].military;
+                        myNews[1] = json["res"].economy;
+                        myNews[0] = json["res"].sports;
+                        myNews[8] = json["res"].entertainment;
+                        myNews[5] =json["res"].education;
+                        myNews[7] = json["res"].phone;
+                        myNews[6] = json["res"].car;
+                        myNews[9] =json["res"].tour;
+
+                        console.log(myNews)
+                        var board = $("#board");
+                        board.children().remove();
+
+                        for(var i=0; i<10; i++) {
+                            if(myNews[i] != 0) {
+                                var j=i+1;
+                                showSomeNews(j);
+                                console.log(j)
+
+                            }
+                        }
+                    }
+                    if (json["code"] == 1) {
+                        alert("出错");
+
+                    }
+                }
+            };
+//            xmlhttp.open("GET", "login/login.php", true);
+//            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//            xmlhttp.send("id=" + encodeURIComponent(str1) + "&password=" + encodeURIComponent(str2));
+
+            xmlhttp.open('GET', "CheckInfo.php?user_name="+user_name,false);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send();
+
+
+        }
+
+
+
+
+
+        function showAINews() {
+
+            var user_name = window.location.href.split("=")[1];
+
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var json = xmlhttp.responseText;
+                    console.log(json);
+                    //json=eval('('+json+')');
+                    var json = JSON.parse(json);
+                    if (json["code"] == 0) {
+
+                        var objectList = new Array();
+
+                        function Persion(name, times) {
+                            this.name = name;
+                            this.times = times;
+                        }
+
+                        objectList.push(new Persion('entertainment', json["res"].entertainment));
+                        objectList.push(new Persion('sports', json["res"].sports));
+                        objectList.push(new Persion('economy', json["res"].economy));
+                        objectList.push(new Persion('military', json["res"].military));
+                        objectList.push(new Persion('technology', json["res"].technology));
+                        objectList.push(new Persion('games', json["res"].games));
+                        objectList.push(new Persion('education', json["res"].education));
+                        objectList.push(new Persion('phone', json["res"].phone));
+                        objectList.push(new Persion('tour', json["res"].tour));
+                        objectList.push(new Persion('car', json["res"].car));
+
+                        //按年龄从小到大排序
+                        objectList.sort(function (a, b) {
+                            return a.times - b.times
+                        });
+                        for (var i = 0; i < objectList.length; i++) {
+                            console.log('times:' + objectList[i].times + ' name:' + objectList[i].name);
+                        }
+
+                        var array = new Array(objectList[9].name,objectList[8].name, objectList[7].name)
+                        console.log(array)
+
+                        var AINews=new Array(0,0,0,0,0,0,0,0,0,0);
+
+                        switch (array[0]) {
+                            case 'entertainment' : AINews[8]=1;  break;
+                            case 'sports' : AINews[0]=1;  break;
+                            case 'economy' : AINews[1]=1;  break;
+                            case 'military' : AINews[3]=1;  break;
+                            case 'technology' : AINews[4]=1;  break;
+                            case 'games' : AINews[2]=1;  break;
+                            case 'education' : AINews[5]=1;  break;
+                            case 'phone' : AINews[7]=1;  break;
+                            case 'tour' : AINews[9]=1;  break;
+                            case 'car' : AINews[6]=1;  break;
+                        }
+                        switch (array[1]) {
+                            case 'entertainment' : AINews[8]=1;  break;
+                            case 'sports' : AINews[0]=1;  break;
+                            case 'economy' : AINews[1]=1;  break;
+                            case 'military' : AINews[3]=1;  break;
+                            case 'technology' : AINews[4]=1;  break;
+                            case 'games' : AINews[2]=1;  break;
+                            case 'education' : AINews[5]=1;  break;
+                            case 'phone' : AINews[7]=1;  break;
+                            case 'tour' : AINews[9]=1;  break;
+                            case 'car' : AINews[6]=1;  break;
+                        }
+                        switch (array[2]) {
+                            case 'entertainment' : AINews[8]=1;  break;
+                            case 'sports' : AINews[0]=1;  break;
+                            case 'economy' : AINews[1]=1;  break;
+                            case 'military' : AINews[3]=1;  break;
+                            case 'technology' : AINews[4]=1;  break;
+                            case 'games' : AINews[2]=1;  break;
+                            case 'education' : AINews[5]=1;  break;
+                            case 'phone' : AINews[7]=1;  break;
+                            case 'tour' : AINews[9]=1;  break;
+                            case 'car' : AINews[6]=1;  break;
+                        }
+
+                        console.log(AINews)
+                        var board = $("#board");
+                        board.children().remove();
+
+                        for(var i=0; i<10; i++)
+                        {
+                            if(AINews[i] != 0)
+                            {
+                                var j=i+1;
+                                showSomeNews(j);
+                                console.log(j)
+
+                            }
+                        }
+
+
+                    }
+                }
+
+
+            };
+            //            xmlhttp.open("GET", "login/login.php", true);
+            //            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            //            xmlhttp.send("id=" + encodeURIComponent(str1) + "&password=" + encodeURIComponent(str2));
+
+            xmlhttp.open('GET', "CheckAI.php?user_name="+user_name, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send();
+
+
+        }
+
+
+
+
+
+
+
+        function showMyNews() {
+
+            var user_name=window.location.href.split("=")[1];
+
+            console.log(user_name)
+
+            findMySetting(user_name);
+
+
+        }
+
+        function showSomeNews(block) {
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {
+                // code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    var json = xmlhttp.responseText;
+                    console.log(json);
+                    var json=JSON.parse(json);
+                    if(json["code"]==0)
+                    {
+
+
+                        var num =(json["res"]).length;
+                        var newsID=new Array(num);
+                        var newsTitle=new Array(num);
+                        var newsTime = new Array(num);
+                        var newsType = new Array(num);
+
+                        //console.log(num)
+
+                        for(var k=0;k< (json["res"]).length;k++) {
+                            newsID[k] = (json["res"])[k].news_id;
+                            newsTitle[k] = (json["res"])[k].title;
+                            newsTime[k] = (json["res"])[k].time;
+                            newsType[k] = (json["res"])[k].type;
+
+
+                            console.log((json["res"])[k].news_id);
+                            console.log((json["res"])[k].title);
+                        }
+
+                        var board = $("#board");
+
+                        console.log("原来是")
+                        console.log(block)
+                        console.log("----")
+
+                        for(var i=0;i<newsID.length;i++) {
+                            (function(j){
+                                var e1 = document.createElement("output");
+                                e1.type = "li";
+                                e1.id = "highlights";
+                                e1.value = "\["+newsType[j]+"\]" +newsTitle[j] + "　　"+newsTime[j];
+                                e1.className ="h4";
+                                e1.onclick = function () {
+//                                    if(block==1) readsome(newsID[j],"games");
+//                                    else if(block==2) readsome(newsID[j],"technology");
+//                                    else if(block==3) readsome(newsID[j],"military");
+//                                    else if(block==4) readsome(newsID[j],"economy");
+//                                    else if(block==5) readsome(newsID[j],"sports");
+//                                    else if(block==6) readsome(newsID[j],"entertainment");
+//                                    else if(block==7) readsome(newsID[j],"education");
+//                                    else if(block==8) readsome(newsID[j],"phone");
+//                                    else if(block==9) readsome(newsID[j],"car");
+//                                    else if(block==10) readsome(newsID[j],"tour");
+//                                    else ;
+                                    read(newsID[j],block);
+                                };
+                                e1.setAttribute("style"," width:700px; height:30px;");
+                                var object = board.append(e1);
+                            })(i)
+                        }
+
+
+
+                    }
+
+                    if(json["code"]==1)
+                    {
+                        alert("列表为空");
+
+
+                    }
+
+
+                }
+            };
+
+
+            xmlhttp.open("GET","NewsSourse/selectNews3.php?block="+block,false);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send();
+
+        }
+
+
+
+
+        function showNews() {
+
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var json = xmlhttp.responseText;
+                    //console.log(json);
+                    var json = JSON.parse(json);
+                    if (json["code"] == 0) {
+
+
+                        var num = (json["res"]).length;
+                        var newsID = new Array(num);
+                        var newsTitle = new Array(num);
+                        var newsTime = new Array(num);
+                        var newsType = new Array(num);
+
+                        //console.log(num)
+
+                        for (var k = 0; k < (json["res"]).length; k++) {
+                            newsID[k] = (json["res"])[k].news_id;
+                            newsTitle[k] = (json["res"])[k].title;
+                            newsTime[k] = (json["res"])[k].time;
+                            newsType[k] = (json["res"])[k].type;
+
+
+                            //console.log((json["res"])[k].news_id);
+                            //console.log((json["res"])[k].title);
+                        }
+
+                        var board = $("#board");
+                        board.children().remove();
+
+
+                        for (var i = 0; i < newsID.length; i++) {
+
+
+                            (function (j) {
+
+
+                                var e1 = document.createElement("output");
+                                e1.type = "li";
+                                e1.id = "highlights";
+                                e1.value = "\[" + newsType[j] + "\]" + newsTitle[j] + "　　" + newsTime[j];
+                                e1.className = "h4";
+                                e1.onclick = function () {
+                                    read(newsID[j], 100);
+                                };
+                                e1.setAttribute("style", " width:700px; height:30px;");
+                                var object = board.append(e1);
+
+                            })(i)
+
+
+                        }
+
+
+                    }
+
+                    if (json["code"] == 1) {
+                        alert("列表为空");
+
+
+                    }
+
+
+                }
+            };
+
+
+            xmlhttp.open("POST","NewsSourse/selectNews1.php",true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send();
+
+
+        }
+
+        
+        
+        
+        function showOtherNews(index) {
+
+            console.log(index)
+            console.log("----------")
+
+
+            var xmlhttp;
+            if (window.XMLHttpRequest)
+            {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {
+                // code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function()
+            {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    var json = xmlhttp.responseText;
+                    console.log(json);
+                    var json=JSON.parse(json);
+                    if(json["code"]==0)
+                    {
+
+
+                        var num =(json["res"]).length;
+                        var newsID=new Array(num);
+                        var newsTitle=new Array(num);
+                        var newsTime = new Array(num);
+                        var newsType = new Array(num);
+
+                        console.log(num)
+
+                        for(var k=0;k< (json["res"]).length;k++) {
+                            newsID[k] = (json["res"])[k].news_id;
+                            newsTitle[k] = (json["res"])[k].title;
+                            newsTime[k] = (json["res"])[k].time;
+                            newsType[k] = (json["res"])[k].type;
+
+
+                            console.log((json["res"])[k].news_id);
+                            console.log((json["res"])[k].title);
+                        }
+
+                        var board = $("#board");
+                        board.children().remove();
+
+
+                        for(var i=0;i<newsID.length;i++) {
+
+
+
+                            (function(j){
+
+
+                                var e1 = document.createElement("output");
+                                e1.type = "li";
+                                e1.id = "highlights";
+                                e1.value = "\["+newsType[j]+"\]" +newsTitle[j] + "　　"+newsTime[j];
+                                e1.className ="h4";
+                                e1.onclick = function () {
+                                    read(newsID[j],index);
+                                };
+                                e1.setAttribute("style"," width:700px; height:30px;");
+                                var object = board.append(e1);
+
+                            })(i)
+
+
+                        }
+
+
+
+                    }
+
+                    if(json["code"]==1)
+                    {
+                        alert("列表为空");
+
+
+                    }
+
+
+                }
+            };
+
+
+            xmlhttp.open("GET","NewsSourse/selectNews2.php?index="+index,false);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send();
+        }
+
+</script>
+
+
+<!--<div id="board" style="width:1000px; margin-left:400px; margin-top:-600px;"></div>-->
+
+
+</body>
+</html>
