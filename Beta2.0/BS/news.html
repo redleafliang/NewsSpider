@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=0.4, minimum-scale=0.1, maximum-scale=2.0, user-scalable=yes" />
+    <title>新闻页面</title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/mymain.css">
+
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="//simurai.com/archive/buttons/buttons.css">
+
+    <style type="text/css">
+        body { background-color: #d2b48c; text-align: center;}
+    </style>
+
+</head>
+<body>
+
+
+<!--<div id="bb8" class="entry wide tall">-->
+<!--<div class="no-scale"></div>-->
+<!--</div>-->
+
+
+<script type="text/javascript">
+
+
+    function myFunction()
+    {
+
+        if(document.referrer == '')
+        {
+            document.open()
+            document.write("<strong> Please do not directly visit this site </strong>")
+            document.close()
+
+        }
+
+        var index=window.location.href.split("=")[1];
+        var index2=window.location.href.split("=")[2];
+        console.log(index);
+        console.log(index2);
+        //var index = 1212;
+//        var url = "Mail.html?index="+index;
+//        $("#mail").click(function() { window.location.href = url; });
+
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var json = xmlhttp.responseText;
+                //console.log(json);
+
+                var json = JSON.parse(json);
+                if (json["code"] == 0) {
+
+//                    var divcontent = document.getElementById("myNewContent")
+//                    myNewContent.innerHTML=json["res"].contents;
+
+                    var divcontent = document.getElementById("myNewContent")
+                    var packages =json["res"].contents;
+//                    console.log(packages.length)
+//                    for(var i=0;i<packages.length;i++)
+//                        if(packages[i]==' ') {
+//                            packages[i] = '*';
+//                            console.log("Flag")
+//                        }
+                    var arr = packages.split('　　');
+                    //console.log(arr.length)
+                    for(var i=1;i<arr.length;i++) {
+                        arr[i] = arr[i - 1] + "<br>"+'　　' + arr[i];
+
+                    }
+                    myNewContent.innerHTML= "<br>"+arr[arr.length-1];
+
+                    var divtitle = document.getElementById("myNewTitle")
+                    myNewTitle.innerHTML=json["res"].title;
+
+                    var divtime = document.getElementById("myNewTime")
+                    myNewTime.innerHTML=json["res"].time;
+
+                    var divtype = document.getElementById("myNewType")
+                    myNewType.innerHTML=json["res"].type;
+
+
+
+
+
+                }
+                if (json["code"] == 1) {
+                    alert("错误");
+                }
+
+            }
+        };
+//        xmlhttp.open('GET', "GetNews.php?id="+index+"&block="+index2,false);
+//        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//        xmlhttp.send();
+
+        xmlhttp.open("POST", "GetNews.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send("id=" + encodeURIComponent(index) + "&block=" + encodeURIComponent(index2));
+
+
+    }
+    $(document).ready(myFunction);
+
+
+</script>
+
+<!--<div id="jeans-pocket" class="entry"; style="text-align: center">-->
+    <!--<div></div>-->
+<!--</div>-->
+
+<a class="button pink" href="javascript:returnBack()" style="margin-top:100px; text-align: center" >返回</a>
+<script type="text/javascript">
+    function returnBack() {
+        var user_name=window.location.href.split("=")[3];
+        var url = "Index.html?index="+user_name;
+        window.location.href = url;
+
+    }
+
+</script>
+
+<div style="margin: auto; width:800px;">
+<h1>
+<div id="myNewTitle" style="text-align: center">
+</div>
+</h1>
+<h4>
+<div id="myNewTime" style="text-align: center">
+</div>
+
+
+<div id="myNewType" style="text-align: center">
+</div>
+</h4>
+
+<div id="myNewContent" style="text-align: left">
+</div>
+
+</div>
+
+<div  style="text-align: center"><a class="button pink" href="javascript:returnBack()" >返回</a> </div>
+
+
+
+</body>
+</html>
